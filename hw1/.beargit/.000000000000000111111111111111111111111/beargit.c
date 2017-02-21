@@ -143,7 +143,7 @@ int is_commit_msg_ok(const char* msg) {
 }
 void generatenewid(char* commit_id,char start,char new)
 {
-		for(int i=39;i>=0;i--)
+		for(int i=39;i>0;i--)
 		{
       if(commit_id[i] == start)
       {

@@ -143,7 +143,7 @@ int is_commit_msg_ok(const char* msg) {
 }
 void generatenewid(char* commit_id,char start,char new)
 {
-		for(int i=39;i>=0;i--)
+		for(int i=39;i>0;i--)
 		{
       if(commit_id[i] == start)
       {
@@ -281,6 +281,7 @@ int beargit_log() {
 	  fprintf(stderr,"ERROR: There are no commits!\n");
 		return 1;	
   }
+	fclose(commit_dir_stream);
 	while(commit_dir_stream != NULL)
 	{
 		char commit_nextID[COMMIT_ID_BYTES];
@@ -307,7 +308,7 @@ int beargit_log() {
 		strcpy(last_commit_dir,".beargit/.");
 		strcat(last_commit_dir,commitdir);
 		fclose(commit_dir_stream);
-		commit_dir_stream = fopen(last_commit_dir,"r");
+		fopen(last_commit_dir,"r");
 	}
 	printf("\n");
   
