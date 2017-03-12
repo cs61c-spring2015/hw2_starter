@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <dirent.h>
+
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -148,7 +148,7 @@ int is_commit_msg_ok(const char* msg) {
 }
 void generatenewid(char* commit_id,char start,char new)
 {
-		for(int i=10;i<40;i++)
+		for(int i=10;i<=40;i++)
 		{
       if(commit_id[i] == start)
       {
@@ -159,13 +159,13 @@ void generatenewid(char* commit_id,char start,char new)
 }
 void next_commit_id_hw1(char* commit_id) {
   /* COMPLETE THE REST */
-	if(commit_id[38] == '0')
+	if(commit_id[39] == '0')
 	  generatenewid(commit_id,'0','1');
-	else if(commit_id[38] == '1')
+	else if(commit_id[39] == '1')
 	{
 		generatenewid(commit_id,'1','c');
 	}
-	else if(commit_id[38] == 'c')
+	else if(commit_id[39] == 'c')
 	{
 		generatenewid(commit_id,'c','6');
 	}
@@ -286,7 +286,7 @@ int beargit_log() {
 	  fprintf(stderr,"ERROR: There are no commits!\n");
 		return 1;	
   }
-	while(commit_dir_stream)
+	while(commit_dir_stream != NULL)
 	{
 		char commit_nextID[COMMIT_ID_BYTES];
     char commit_msg[FILENAME_SIZE];
@@ -349,7 +349,7 @@ void next_commit_id(char* commit_id) {
   // be used to encode the current branch number. This is necessary to avoid
   // duplicate IDs in different branches, as they can have the same pre-
   // decessor (so next_commit_id has to depend on something else).
- // strtok(current_branch,"\n");
+  strtok(current_branch,"\n");
 	int n = get_branch_number(current_branch);
   for (int i = 0; i < COMMIT_ID_BRANCH_BYTES; i++) {
     // This translates the branch number into base 3 and substitutes 0 for
@@ -420,39 +420,6 @@ int beargit_branch() {
 
 int checkout_commit(const char* commit_id) {
   /* COMPLETE THE REST */
-	/* The following code form the path 
-	 * for .index and copy the .index from
-	 * the commit point .index.*/
-	char commit_id_index[512];
-	DIR *d;
-	strcpy(commit_id_index,".beargit/.");
-	strcat(commit_id_index,commit_id);
-	d = opendir(commit_id_index);
-	strcat(commit_id_index,"/.index");
-	fs_cp(commit_id_index,".beargit/.index");
-	if(d)
-	{
-	  struct dirent *dir;
-	  while((dir = readdir(d))!= NULL)
-		{
-	    if(dir->d_name[0] != '.' )
-      {
-		    char commitfilename[512];
-	      char beargitfile[512];
-		    strcpy(commitfilename,".beargit/.");
-		    strcat(commitfilename,commit_id);
-		    strcat(commitfilename,"/");
-		    strcat(commitfilename,dir->d_name);
-
-				//strcpy(beargitfile,"./");
-		    strcat(beargitfile,dir->d_name);
-				fs_rm(beargitfile);
-		    fs_cp(commitfilename,beargitfile);
-				memset(beargitfile,0,sizeof(beargitfile));
-			}
-		}
-  } 	
-  /*The following code recover the .prev file*/ 
   return 0;
 }
 
@@ -468,7 +435,7 @@ int is_it_a_commit_id(const char* commit_id) {
 			{
 			  if(temp != '1')
 				{
-				  if(temp != '6')
+				  if(temp != 'a')
 				  {
 					  if(temp != 'c')
 						  return 0;
@@ -477,10 +444,6 @@ int is_it_a_commit_id(const char* commit_id) {
 			}
 		}
 		return 1;
-	}
-	else
-	{
-	  return 0;
 	}
 }
 
@@ -501,7 +464,7 @@ int beargit_checkout(const char* arg, int new_branch) {
   // Check whether the argument is a commit ID. If yes, we just stay in detached mode
   // without actually having to change into any other branch.
   if (is_it_a_commit_id(arg)) {
-    char commit_dir[FILENAME_SIZE] = ".beargit/.";
+    char commit_dir[FILENAME_SIZE] = ".beargit/";
     strcat(commit_dir, arg);
     if (!fs_check_dir_exists(commit_dir)) {
       fprintf(stderr, "ERROR: Commit %s does not exist\n", arg);
@@ -524,14 +487,13 @@ int beargit_checkout(const char* arg, int new_branch) {
   if (!(!branch_exists || !new_branch)) {
     fprintf(stderr, "ERROR: A branch named %s already exists\n", branch_name);
     return 1;
-  } else if (!branch_exists && !new_branch) {
+  } else if (!branch_exists && new_branch) {
     fprintf(stderr, "ERROR: No branch %s exists\n", branch_name);
     return 1;
   }
 
   // File for the branch we are changing into.
-  char branch_file[512];
-	strcpy(branch_file,".beargit/.branch_"); 
+  char* branch_file = ".beargit/.branch_"; 
   strcat(branch_file, branch_name);
 
   // Update the branch file if new branch is created (now it can't go wrong anymore)
@@ -550,4 +512,4 @@ int beargit_checkout(const char* arg, int new_branch) {
 
   // Check out the actual commit.
   return checkout_commit(branch_head_commit_id);
-	}
+}

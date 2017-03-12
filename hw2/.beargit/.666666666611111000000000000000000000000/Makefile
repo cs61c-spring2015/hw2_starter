@@ -13,7 +13,4 @@ ifndef INSTMANPATH
 endif
 	python2.7 tester.pyc beargit.c
 #This is new one
-#TRHER IS A MOD
 #This is the newer one
-#MOD for last check
-#MOD IN third branch

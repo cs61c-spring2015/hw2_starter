@@ -5,3 +5,4 @@ main.c
 util.h
 util.c
 Makefile
+tester.pyc

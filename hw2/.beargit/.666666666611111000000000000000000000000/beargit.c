@@ -148,7 +148,7 @@ int is_commit_msg_ok(const char* msg) {
 }
 void generatenewid(char* commit_id,char start,char new)
 {
-		for(int i=10;i<40;i++)
+		for(int i=10;i<=40;i++)
 		{
       if(commit_id[i] == start)
       {
@@ -159,13 +159,13 @@ void generatenewid(char* commit_id,char start,char new)
 }
 void next_commit_id_hw1(char* commit_id) {
   /* COMPLETE THE REST */
-	if(commit_id[38] == '0')
+	if(commit_id[39] == '0')
 	  generatenewid(commit_id,'0','1');
-	else if(commit_id[38] == '1')
+	else if(commit_id[39] == '1')
 	{
 		generatenewid(commit_id,'1','c');
 	}
-	else if(commit_id[38] == 'c')
+	else if(commit_id[39] == 'c')
 	{
 		generatenewid(commit_id,'c','6');
 	}
@@ -478,10 +478,6 @@ int is_it_a_commit_id(const char* commit_id) {
 		}
 		return 1;
 	}
-	else
-	{
-	  return 0;
-	}
 }
 
 int beargit_checkout(const char* arg, int new_branch) {
@@ -530,8 +526,7 @@ int beargit_checkout(const char* arg, int new_branch) {
   }
 
   // File for the branch we are changing into.
-  char branch_file[512];
-	strcpy(branch_file,".beargit/.branch_"); 
+  char* branch_file = ".beargit/.branch_"; 
   strcat(branch_file, branch_name);
 
   // Update the branch file if new branch is created (now it can't go wrong anymore)

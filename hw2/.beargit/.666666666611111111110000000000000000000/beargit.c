@@ -478,10 +478,6 @@ int is_it_a_commit_id(const char* commit_id) {
 		}
 		return 1;
 	}
-	else
-	{
-	  return 0;
-	}
 }
 
 int beargit_checkout(const char* arg, int new_branch) {

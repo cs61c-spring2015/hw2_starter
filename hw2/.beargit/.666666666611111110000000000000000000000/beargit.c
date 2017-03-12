@@ -478,10 +478,6 @@ int is_it_a_commit_id(const char* commit_id) {
 		}
 		return 1;
 	}
-	else
-	{
-	  return 0;
-	}
 }
 
 int beargit_checkout(const char* arg, int new_branch) {
@@ -530,8 +526,7 @@ int beargit_checkout(const char* arg, int new_branch) {
   }
 
   // File for the branch we are changing into.
-  char branch_file[512];
-	strcpy(branch_file,".beargit/.branch_"); 
+  char* branch_file = ".beargit/.branch_"; 
   strcat(branch_file, branch_name);
 
   // Update the branch file if new branch is created (now it can't go wrong anymore)
